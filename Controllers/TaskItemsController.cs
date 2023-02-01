@@ -9,7 +9,7 @@ namespace WebApiTest.Controllers
         //URL: GET /task_items
 
         //Directives [] additional functionality
-        private Dictionary<string,object> data;
+        private Dictionary<string, object> data;
         private String payload;
 
         /*
@@ -35,24 +35,25 @@ namespace WebApiTest.Controllers
             }
             */
 
-        public TaskItemsController(){
+        public TaskItemsController()
+        {
             data = new Dictionary<string, object>();
 
-            Dictionary<string,object> task1 = new Dictionary<string, object>();
-            task1.Add("id",1);
-            task1.Add("task_name","Task1");
-            task1.Add("status",1);
-            task1.Add("priority",1);
-            task1.Add("desc","Task 1 Description");
-            task1.Add("team_id",1);
+            Dictionary<string, object> task1 = new Dictionary<string, object>();
+            task1.Add("id", 1);
+            task1.Add("task_name", "Task1");
+            task1.Add("status", 1);
+            task1.Add("priority", 1);
+            task1.Add("desc", "Task 1 Description");
+            task1.Add("team_id", 1);
 
-            Dictionary<string,object> task2 = new Dictionary<string, object>();
-            task2.Add("id",2);
-            task2.Add("task_name","Task2");
-            task2.Add("status",3);
-            task2.Add("priority",3);
-            task2.Add("desc","Task 2 Description");
-            task2.Add("team_id",2);
+            Dictionary<string, object> task2 = new Dictionary<string, object>();
+            task2.Add("id", 2);
+            task2.Add("task_name", "Task2");
+            task2.Add("status", 3);
+            task2.Add("priority", 3);
+            task2.Add("desc", "Task 2 Description");
+            task2.Add("team_id", 2);
 
             List<object> taskList = new List<object>();
             taskList.Add(task1);
@@ -73,13 +74,21 @@ namespace WebApiTest.Controllers
         [Route("task_items/{id}")]
         public IActionResult Show(int id)
         {
-            object task = ((List<object>)(this.data["task_items"]))[id-1]; //change to search
 
-            // Dictionary<string,object> taskName = (Dictionary<string,object>)(((List<object>)(this.data["task_items"]))[id-1]);
-            // return Ok(taskName["task_name"]);
-            
-            return Ok(JsonSerializer.Serialize(task));
-            // return Ok(task);
+            List<object> taskList = (List<object>)this.data["task_items"];
+            String task;
+
+            foreach (object t in taskList)
+            {
+                Dictionary<string, object> taskItem = (Dictionary<string, object>)t;
+
+                if (taskItem["id"].Equals(id))
+                {
+                    return Ok(JsonSerializer.Serialize(t));
+                }
+            }
+
+            return Ok("Task Item Not Found");
         }
     }
 }
