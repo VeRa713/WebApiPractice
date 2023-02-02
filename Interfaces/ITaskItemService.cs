@@ -1,8 +1,11 @@
 namespace WebApiTest.Interfaces;
 
+using WebApiTest.Models;
+
 public interface ITaskItemsService
 {
-    public List<Dictionary<string, object>> GetAll();
-
-    public void Save(Dictionary<string, object> hash);
+    public List<TaskItem> GetAll();
+    public void Save(TaskItem hash);
+    public TaskItem Find(int id);
+    public void Delete(int id);
 }

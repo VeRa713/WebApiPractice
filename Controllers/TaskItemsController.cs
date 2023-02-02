@@ -3,7 +3,7 @@ namespace WebApiTest.Controllers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Interfaces;
-
+using WebApiTest.Models;
 
 // base route = task_items/HttpGet
 [ApiController]
@@ -13,31 +13,7 @@ public class TaskItemsController : ControllerBase
     //Endpoint to return all taskitems
     //URL: GET /task_items
 
-    //Directives [] additional functionality
     private readonly ITaskItemsService _taskItemsService;
-
-    /*
-        {
-            "task_items": [
-                { 
-                    "id": 1,
-                    "task_name": "Task1"
-                    "status": 1
-                    "priority": 1
-                    "desc": "Task 1 Description"
-                    "team_id": 1
-                },
-                { 
-                    "id": 2,
-                    "task_name": "Task2"
-                    "status": 3
-                    "priority": 3
-                    "desc": "Task 2 Description"
-                    "team_id": 2
-                }
-            ]
-        }
-        */
 
     public TaskItemsController(ITaskItemsService taskItemsService)
     {
@@ -60,6 +36,8 @@ public class TaskItemsController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult Show(int id)
     {
+        // TaskItem taskitem = _taskItemsService.Find(id);
+        // return Ok(taskitem);
 
         var taskList = _taskItemsService.GetAll();
 
@@ -91,13 +69,7 @@ public class TaskItemsController : ControllerBase
 
         Console.WriteLine("Task: " + task_name);
 
-        Dictionary<string, object> newTask = new Dictionary<string, object>();
-        newTask.Add("id", id);
-        newTask.Add("task_name", task_name);
-        newTask.Add("status", status);
-        newTask.Add("priority", priority);
-        newTask.Add("desc", desc);
-        newTask.Add("team_id", team_id);
+        TaskItem newTask = new TaskItem(id, task_name, status, priority, desc, team_id);
 
         _taskItemsService.Save(newTask);
 
@@ -105,5 +77,13 @@ public class TaskItemsController : ControllerBase
         message.Add("message", "OK");
 
         return Ok(message);
+    }
+
+    [HttpPost("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _taskItemsService.Delete(id);
+
+        return Ok();
     }
 }
