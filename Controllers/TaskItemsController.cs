@@ -32,26 +32,16 @@ public class TaskItemsController : ControllerBase
     }
 
     //Endpoint to return a single expense item based on id
-    //to transfer search in service
     [HttpGet("{id}")]
     public IActionResult Show(int id)
     {
-        // TaskItem taskitem = _taskItemsService.Find(id);
-        // return Ok(taskitem);
+        TaskItem task = _taskItemsService.Find(id);
 
-        var taskList = _taskItemsService.GetAll();
-
-        foreach (object t in taskList)
-        {
-            Dictionary<string, object> taskItem = (Dictionary<string, object>)t;
-
-            if (taskItem["id"].Equals(id))
-            {
-                return Ok(JsonSerializer.Serialize(t));
-            }
+        if(task == null){
+            return Ok("Task Item Not Found");
         }
 
-        return Ok("Task Item Not Found");
+        return Ok(task);
     }
 
     [HttpPost("")]
@@ -79,11 +69,15 @@ public class TaskItemsController : ControllerBase
         return Ok(message);
     }
 
-    [HttpPost("{id}")]
+    [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
+        // Dictionary<string, object> hash = JsonSerializer.Deserialize<Dictionary<string, object>>(payload.ToString());
+        
+        // int id = int.Parse(hash["id"].ToString());
+
         _taskItemsService.Delete(id);
 
-        return Ok();
+        return Ok("Task successfully deleted!");
     }
 }

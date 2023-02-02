@@ -3,3 +3,6 @@ curl http://localhost:5003/task_items | jq
 
 Save
 curl -X POST -H "Content-Type: application/json" -d @payloads/taskItem.json http://localhost:5003/task_items | jq
+
+Delete
+curl -X DELETE -H "Accept: application/json" -d @payloads/deleteItem.json http://localhost:5003/task_items | jq

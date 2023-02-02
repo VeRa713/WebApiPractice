@@ -20,12 +20,14 @@ public class TaskItemsApplicationContextService : ITaskItemsService
     
     public TaskItem Find(int id)
     {
-        throw new NotImplementedException();
+        TaskItem task = ApplicationContext.Instance.taskItemsList.Where(list => list.Id == id).FirstOrDefault();
+
+        return task;
     }
 
     public void Delete(int id)
     {
         //call find here and then delete
-        throw new NotImplementedException();
+        ApplicationContext.Instance.taskItemsList.Remove(Find(id));
     }
 }
