@@ -1,3 +1,6 @@
+using WebApiTest.Interfaces;
+using WebApiTest.Services;
+
 namespace WebApiTest
 {
     public class Program
@@ -12,6 +15,9 @@ namespace WebApiTest
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Add services here
+            builder.Services.AddScoped<ITaskItemsService, TaskItemsApplicationContextService>();
 
             WebApplication app = builder.Build();
 

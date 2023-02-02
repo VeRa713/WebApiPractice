@@ -2,6 +2,8 @@ namespace WebApiTest.Controllers;
 
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using WebApiTest.Interfaces;
+
 
 // base route = task_items/HttpGet
 [ApiController]
@@ -12,9 +14,7 @@ public class TaskItemsController : ControllerBase
     //URL: GET /task_items
 
     //Directives [] additional functionality
-    private Dictionary<string, object> data;
-    List<object> taskList;
-    private String serializedData;
+    private readonly ITaskItemsService _taskItemsService;
 
     /*
         {
@@ -39,47 +39,29 @@ public class TaskItemsController : ControllerBase
         }
         */
 
-    public TaskItemsController()
+    public TaskItemsController(ITaskItemsService taskItemsService)
     {
-        data = new Dictionary<string, object>();
-
-        Dictionary<string, object> task1 = new Dictionary<string, object>();
-        task1.Add("id", 1);
-        task1.Add("task_name", "Task1");
-        task1.Add("status", 1);
-        task1.Add("priority", 1);
-        task1.Add("desc", "Task 1 Description");
-        task1.Add("team_id", 1);
-
-        Dictionary<string, object> task2 = new Dictionary<string, object>();
-        task2.Add("id", 2);
-        task2.Add("task_name", "Task2");
-        task2.Add("status", 3);
-        task2.Add("priority", 3);
-        task2.Add("desc", "Task 2 Description");
-        task2.Add("team_id", 2);
-
-        taskList = new List<object>();
-        taskList.Add(task1);
-        taskList.Add(task2);
-
-        data.Add("task_items", taskList);
+        _taskItemsService = taskItemsService;
     }
+
 
     [HttpGet("")]
     public IActionResult Index()
     {
-        this.serializedData = JsonSerializer.Serialize(data);
-        return Ok(this.serializedData); //successful request - Status code: 200
+        Dictionary<string, object> data = new Dictionary<string, object>();
+
+        data.Add("task_items", _taskItemsService.GetAll());
+
+        return Ok(data);
     }
 
     //Endpoint to return a single expense item based on id
+    //to transfer search in service
     [HttpGet("{id}")]
     public IActionResult Show(int id)
     {
 
-        List<object> taskList = (List<object>)this.data["task_items"];
-        String task;
+        var taskList = _taskItemsService.GetAll();
 
         foreach (object t in taskList)
         {
@@ -117,15 +99,7 @@ public class TaskItemsController : ControllerBase
         newTask.Add("desc", desc);
         newTask.Add("team_id", team_id);
 
-        //add newTask to list then to dictionary
-        taskList.Add(newTask);
-
-        Console.WriteLine("NewTaskList: " + taskList.Count());
-
-        this.data["task_items"] = taskList;
-
-        var s = ((Dictionary<string, object>)(((List<object>)(this.data["task_items"]))[2]))["task_name"];
-        Console.WriteLine("NewTask: " + s.ToString());
+        _taskItemsService.Save(newTask);
 
         Dictionary<string, object> message = new Dictionary<string, object>();
         message.Add("message", "OK");
