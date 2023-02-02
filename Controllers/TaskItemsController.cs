@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Interfaces;
 using WebApiTest.Models;
+using WebApiTest.Commands;
 
 // base route = task_items/HttpGet
 [ApiController]
@@ -37,7 +38,8 @@ public class TaskItemsController : ControllerBase
     {
         TaskItem task = _taskItemsService.Find(id);
 
-        if(task == null){
+        if (task == null)
+        {
             return Ok("Task Item Not Found");
         }
 
@@ -50,16 +52,9 @@ public class TaskItemsController : ControllerBase
         // curl -X POST -H "Content-Type: application/json" -d @payloads/taskItem.json http://localhost:5003/task_items | jq
         Dictionary<string, object> hash = JsonSerializer.Deserialize<Dictionary<string, object>>(payload.ToString());
 
-        int id = int.Parse(hash["id"].ToString());
-        string task_name = hash["task_name"].ToString();
-        int status = int.Parse(hash["status"].ToString());
-        int priority = int.Parse(hash["priority"].ToString());
-        string desc = hash["desc"].ToString();
-        int team_id = int.Parse(hash["team_id"].ToString());
+        var cmd = new BuildTaskItemFromDictionary(hash);
 
-        Console.WriteLine("Task: " + task_name);
-
-        TaskItem newTask = new TaskItem(id, task_name, status, priority, desc, team_id);
+        TaskItem newTask = cmd.Execute();
 
         _taskItemsService.Save(newTask);
 
@@ -73,7 +68,7 @@ public class TaskItemsController : ControllerBase
     public IActionResult Delete([FromBody] object payload)
     {
         Dictionary<string, object> hash = JsonSerializer.Deserialize<Dictionary<string, object>>(payload.ToString());
-        
+
         int id = int.Parse(hash["id"].ToString());
 
         _taskItemsService.Delete(id);

@@ -9,6 +9,8 @@ public class TaskItem
     public string Desc { get; set; }
     public int TeamId { get; set; }
 
+    public TaskItem() { }
+
     public TaskItem(int id, string taskName, int status, int priority, string desc, int teamId)
     {
         Id = id;
