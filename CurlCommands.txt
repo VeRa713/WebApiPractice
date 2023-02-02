@@ -5,4 +5,9 @@ Save
 curl -X POST -H "Content-Type: application/json" -d @payloads/taskItem.json http://localhost:5003/task_items | jq
 
 Delete
-curl -X DELETE -H "Accept: application/json" -d @payloads/deleteItem.json http://localhost:5003/task_items | jq
+if param is int: 
+curl -X DELETE http://localhost:5003/task_items/1
+
+if param is from json file :
+curl -X DELETE -H "Content-Type: application/json" -d @payloads/deleteItem.json http://localhost:5003/task_items | jq
+
