@@ -64,7 +64,7 @@ public class TaskItemsController : ControllerBase
         return Ok(message);
     }
 
-    [HttpDelete("")]
+    [HttpDelete("delete_task")]
     public IActionResult Delete([FromBody] object payload)
     {
         Dictionary<string, object> hash = JsonSerializer.Deserialize<Dictionary<string, object>>(payload.ToString());
