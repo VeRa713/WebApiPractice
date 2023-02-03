@@ -4,5 +4,6 @@
     "status": 1,
     "priority": 1,
     "desc": "Task 3 Description",
-    "team_id": 1
+    "team_id": 1,
+    "deadline": "2023-02-18"
 }

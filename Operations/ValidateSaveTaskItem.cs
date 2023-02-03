@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace WebApiTest.Operations;
 
 public class ValidateSaveTaskItem
@@ -17,6 +19,7 @@ public class ValidateSaveTaskItem
         Errors.Add("priority", new List<string>());
         Errors.Add("desc", new List<string>());
         Errors.Add("team_id", new List<string>());
+        Errors.Add("deadline", new List<string>());
     }
 
     public bool HasErrors()
@@ -49,6 +52,11 @@ public class ValidateSaveTaskItem
         }
 
         if (Errors["team_id"].Count > 0)
+        {
+            ans = true;
+        }
+
+        if (Errors["deadline"].Count > 0)
         {
             ans = true;
         }
@@ -105,6 +113,35 @@ public class ValidateSaveTaskItem
         else
         {
             Errors["team_id"].Add("Team Id should be an int");
+        }
+
+        if (!payload.ContainsKey("deadline"))
+        {
+            Errors["deadline"].Add("Deadline is required");
+        }
+        else
+        {
+            //check format
+            // Define a regular expression for repeated words.
+
+            //I should transfer this somewhere to make it reusable....
+            Regex rx = new Regex(@"^[1-2][0-9]{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2][0-9])|(3[0-1]))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            // Define a test string.
+            string deadline = payload["deadline"].ToString();
+            Console.WriteLine("Deadline: " + deadline);
+
+            // Find matches.
+            MatchCollection matches = rx.Matches(deadline);
+
+            // Report the number of matches found.
+            Console.WriteLine("{0} matches found in:\n   {1}", matches.Count, deadline);
+
+            if(matches.Count == 0){
+                Errors["deadline"].Add("Deadline is does not match required format");
+            }
+
+            //should not be past today's date
         }
     }
 }
