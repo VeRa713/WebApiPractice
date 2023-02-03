@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiTest.Interfaces;
 using WebApiTest.Models;
 using WebApiTest.Commands;
+using WebApiTest.Operations;
 
 // base route = task_items/HttpGet
 [ApiController]
@@ -52,16 +53,26 @@ public class TaskItemsController : ControllerBase
         // curl -X POST -H "Content-Type: application/json" -d @payloads/taskItem.json http://localhost:5003/task_items | jq
         Dictionary<string, object> hash = JsonSerializer.Deserialize<Dictionary<string, object>>(payload.ToString());
 
-        var cmd = new BuildTaskItemFromDictionary(hash);
+        ValidateSaveTaskItem validator = new ValidateSaveTaskItem(hash);
+        validator.Execute();
 
-        TaskItem newTask = cmd.Execute();
+        if (validator.HasErrors())
+        {
+            return UnprocessableEntity(validator.Errors);
+        }
+        else
+        {
+            BuildTaskItemFromDictionary builder = new BuildTaskItemFromDictionary(hash);
 
-        _taskItemsService.Save(newTask);
+            TaskItem newTask = builder.Execute();
 
-        Dictionary<string, object> message = new Dictionary<string, object>();
-        message.Add("message", "OK");
+            _taskItemsService.Save(newTask);
 
-        return Ok(message);
+            Dictionary<string, object> message = new Dictionary<string, object>();
+            message.Add("message", "OK");
+
+            return Ok(message);
+        }
     }
 
     [HttpDelete("delete_task")]
