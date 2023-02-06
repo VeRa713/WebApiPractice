@@ -16,7 +16,7 @@ public class ValidateSaveTaskItem
         Errors.Add("id", new List<string>());
         Errors.Add("task_name", new List<string>());
         Errors.Add("status", new List<string>());
-        Errors.Add("priority", new List<string>());
+        Errors.Add("priority_id", new List<string>());
         Errors.Add("desc", new List<string>());
         Errors.Add("team_id", new List<string>());
         Errors.Add("deadline", new List<string>());
@@ -25,11 +25,6 @@ public class ValidateSaveTaskItem
     public bool HasErrors()
     {
         bool ans = false;
-
-        if (Errors["id"].Count > 0)
-        {
-            ans = true;
-        }
 
         if (Errors["task_name"].Count > 0)
         {
@@ -41,7 +36,7 @@ public class ValidateSaveTaskItem
             ans = true;
         }
 
-        if (Errors["priority"].Count > 0)
+        if (Errors["priority_id"].Count > 0)
         {
             ans = true;
         }
@@ -71,15 +66,6 @@ public class ValidateSaveTaskItem
 
     public void Execute()
     {
-        //Task Id validation
-        //check if less than 0
-        //check if non duplicate
-        //check data type
-        if (!payload.ContainsKey("id"))
-        {
-            Errors["id"].Add("Task Id is required");
-        }
-
         //Task Name validation
         //check if not an empty string
         if (!payload.ContainsKey("task_name"))
@@ -99,9 +85,9 @@ public class ValidateSaveTaskItem
         //check if not an empty string 
         //check if within range (1-3)
         //check data type
-        if (!payload.ContainsKey("priority"))
+        if (!payload.ContainsKey("priority_id"))
         {
-            Errors["priority"].Add("Priority is required");
+            Errors["priority_id"].Add("Priority is required");
         }
 
         //check data type

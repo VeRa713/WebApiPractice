@@ -22,12 +22,12 @@ public class ApplicationContext
 
     public ApplicationContext()
     {
-        this.taskItemsList = new List<TaskItem>();
+        // this.taskItemsList = new List<TaskItem>();
 
-        TaskItem task1 = new TaskItem(1, "Task1", 1, 1, "Non-priority Task", 1);
-        TaskItem task2 = new TaskItem(2, "Task2", 3, 3, "Urgent Task!", 2);
+        // TaskItem task1 = new TaskItem(1, "Task1", 1, "Non-priority Task", 1, 1);
+        // TaskItem task2 = new TaskItem(2, "Task2", 3, "Urgent Task!", 2, 1);
 
-        taskItemsList.Add(task1);
-        taskItemsList.Add(task2);
+        // taskItemsList.Add(task1);
+        // taskItemsList.Add(task2);
     }
 }
