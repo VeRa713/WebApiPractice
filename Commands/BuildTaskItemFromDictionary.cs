@@ -2,21 +2,25 @@ namespace WebApiTest.Commands;
 
 using WebApiTest.Models;
 using System.Text.Json;
+using WebApiTest.Interfaces;
 
 public class BuildTaskItemFromDictionary
 {
     private Dictionary<string, object> data;
+    private IPriorityService _priorityService;
 
     // 1 - Constructor that passes all inputs required
-    public BuildTaskItemFromDictionary(Dictionary<string, object> hash)
+    public BuildTaskItemFromDictionary(Dictionary<string, object> hash, IPriorityService priorityService)
     {
         this.data = hash;
+        _priorityService = priorityService;
     }
 
     // 2 - Executable Method. Like its own Main method
     public TaskItem Execute()
     {
         TaskItem newTaskitem = new TaskItem();
+        Priority priority = new Priority();
 
         // newTaskitem.Id = int.Parse(data["id"].ToString());
         // newTaskitem.TaskName = data["task_name"].ToString();
@@ -64,7 +68,10 @@ public class BuildTaskItemFromDictionary
 
         if (data.ContainsKey("priority_id"))
         {
-            newTaskitem.PriorityId = int.Parse(data["team_id"].ToString());
+            //if it has priority Id, assign priority id and then find priority for display
+            int priorityId = int.Parse(data["team_id"].ToString());
+            newTaskitem.PriorityId = priorityId;
+            newTaskitem.Priority = _priorityService.Find(priorityId);
         }
 
         return newTaskitem;

@@ -16,10 +16,12 @@ public class TaskItemsController : ControllerBase
     //URL: GET /task_items
 
     private readonly ITaskItemsService _taskItemsService;
+    private readonly IPriorityService _priorityService;
 
-    public TaskItemsController(ITaskItemsService taskItemsService)
+    public TaskItemsController(ITaskItemsService taskItemsService, IPriorityService priorityService)
     {
         _taskItemsService = taskItemsService;
+        _priorityService = priorityService;
     }
 
 
@@ -62,7 +64,7 @@ public class TaskItemsController : ControllerBase
         }
         else
         {
-            BuildTaskItemFromDictionary builder = new BuildTaskItemFromDictionary(hash);
+            BuildTaskItemFromDictionary builder = new BuildTaskItemFromDictionary(hash, _priorityService);
 
             TaskItem newTask = builder.Execute();
 

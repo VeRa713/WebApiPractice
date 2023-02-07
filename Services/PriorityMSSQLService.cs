@@ -24,7 +24,7 @@ public class PriorityMSSQLService : IPriorityService
 
     public List<Priority> GetAll()
     {
-         return _dataContext.Priorities.ToList<Priority>();
+        return _dataContext.Priorities.ToList<Priority>();
     }
 
     public void Save(Priority priority)

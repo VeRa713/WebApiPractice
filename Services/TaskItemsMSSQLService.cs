@@ -7,14 +7,17 @@ using WebApiTest.Interfaces;
 using WebApiTest.Models;
 using WebApiTest.Data;
 using WebApiTest.Commands;
+using System.Text.Json.Serialization;
 
 public class TaskItemsMSSQLService : ITaskItemsService
 {
     public readonly DataContext _dataContext;
+    public readonly IPriorityService _priorityService;
 
-    public TaskItemsMSSQLService(DataContext dataContext)
+    public TaskItemsMSSQLService(DataContext dataContext, IPriorityService priorityService)
     {
         _dataContext = dataContext;
+        _priorityService = priorityService;      
     }
 
     public void Delete(int id)
@@ -29,7 +32,14 @@ public class TaskItemsMSSQLService : ITaskItemsService
 
     public List<TaskItem> GetAll()
     {
-        return _dataContext.TaskItems.ToList<TaskItem>();
+        List<TaskItem> taskItem = _dataContext.TaskItems.ToList<TaskItem>();
+
+        foreach (TaskItem task in taskItem)
+        {
+            task.Priority = _priorityService.Find(task.PriorityId);
+        }
+
+        return taskItem;
     }
 
     public void Save(TaskItem task)
@@ -48,6 +58,7 @@ public class TaskItemsMSSQLService : ITaskItemsService
             temp.Desc = task.Desc;
             temp.TeamId = task.TeamId;
             temp.PriorityId = task.PriorityId;
+            temp.Priority = _priorityService.Find(task.PriorityId);
         }
 
         _dataContext.SaveChanges();
