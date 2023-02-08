@@ -58,12 +58,12 @@ public class BuildTaskItemFromDictionary
         //if team id is empty or does not exist set it to unassigned
         if (data.ContainsKey("team_id"))
         {
-            newTaskitem.TeamId = int.Parse(data["team_id"].ToString());
+            newTaskitem.UserId = int.Parse(data["team_id"].ToString());
 
         }
         else
         {
-            newTaskitem.TeamId = 0; //0 is unassigned so user input should be greated than 0
+            newTaskitem.UserId = 0; //0 is unassigned so user input should be greated than 0
         }
 
         if (data.ContainsKey("priority_id"))

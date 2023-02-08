@@ -44,6 +44,7 @@ namespace WebApiTest
             // Add services here
             // builder.Services.AddScoped<ITaskItemsService, TaskItemsApplicationContextService>();
             builder.Services.AddScoped<ITaskItemsService, TaskItemsMSSQLService>();
+            builder.Services.AddScoped<IUserService, UserMSSQLService>();
             builder.Services.AddScoped<IPriorityService, PriorityMSSQLService>();
 
             WebApplication app = builder.Build();

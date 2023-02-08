@@ -1,9 +1,7 @@
 {
-    "id":9,
-    "task_name": "Task6",
+    "task_name": "New Task",
     "status": 1,
     "priority_id": 2,
-    "desc": "Task 5 Description",
-    "team_id": 1,
-    "deadline": "2023-02-18"
+    "desc": "Task Description",
+    "user_id": 1
 }

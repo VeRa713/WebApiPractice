@@ -6,8 +6,8 @@ public class TaskItem
     public string TaskName { get; set; }
     public int Status { get; set; }
     public string Desc { get; set; }
-    public int TeamId { get; set; }
-    
+    public int UserId { get; set; }
+    public User User { get; set; }
     public int PriorityId { get; set; }
     public Priority Priority { get; set; }
 

@@ -46,12 +46,7 @@ public class ValidateSaveTaskItem
             ans = true;
         }
 
-        if (Errors["team_id"].Count > 0)
-        {
-            ans = true;
-        }
-
-        if (Errors["deadline"].Count > 0)
+        if (Errors["user_id"].Count > 0)
         {
             ans = true;
         }
@@ -92,42 +87,38 @@ public class ValidateSaveTaskItem
 
         //check data type
         //check if existing id (once team model is created)
-        if (payload.ContainsKey("team_id"))
+        if (payload.ContainsKey("user_id"))
         {
-
-        }
-        else
-        {
-            Errors["team_id"].Add("Team Id should be an int");
+            Errors["user_id"].Add("User ID is required");
         }
 
-        if (!payload.ContainsKey("deadline"))
-        {
-            Errors["deadline"].Add("Deadline is required");
-        }
-        else
-        {
-            //check format
-            // Define a regular expression for repeated words.
+        // if (!payload.ContainsKey("deadline"))
+        // {
+        //     Errors["deadline"].Add("Deadline is required");
+        // }
+        // else
+        // {
+        //     //check format
+        //     // Define a regular expression for repeated words.
 
-            //I should transfer this somewhere to make it reusable....
-            Regex rx = new Regex(@"^[1-2][0-9]{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2][0-9])|(3[0-1]))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        //     //I should transfer this somewhere to make it reusable....
+        //     Regex rx = new Regex(@"^[1-2][0-9]{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2][0-9])|(3[0-1]))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            // Define a test string.
-            string deadline = payload["deadline"].ToString();
-            Console.WriteLine("Deadline: " + deadline);
+        //     // Define a test string.
+        //     string deadline = payload["deadline"].ToString();
+        //     Console.WriteLine("Deadline: " + deadline);
 
-            // Find matches.
-            MatchCollection matches = rx.Matches(deadline);
+        //     // Find matches.
+        //     MatchCollection matches = rx.Matches(deadline);
 
-            // Report the number of matches found.
-            Console.WriteLine("{0} matches found in:\n   {1}", matches.Count, deadline);
+        //     // Report the number of matches found.
+        //     Console.WriteLine("{0} matches found in:\n   {1}", matches.Count, deadline);
 
-            if(matches.Count == 0){
-                Errors["deadline"].Add("Deadline is does not match required format");
-            }
+        //     if(matches.Count == 0){
+        //         Errors["deadline"].Add("Deadline is does not match required format");
+        //     }
 
-            //should not be past today's date
-        }
+        //     //should not be past today's date
+        // }
     }
 }

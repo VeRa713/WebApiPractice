@@ -12,11 +12,13 @@ using System.Text.Json.Serialization;
 public class TaskItemsMSSQLService : ITaskItemsService
 {
     public readonly DataContext _dataContext;
+    public readonly IUserService _userService;
     public readonly IPriorityService _priorityService;
 
-    public TaskItemsMSSQLService(DataContext dataContext, IPriorityService priorityService)
+    public TaskItemsMSSQLService(DataContext dataContext, IUserService userService ,IPriorityService priorityService)
     {
         _dataContext = dataContext;
+        _userService = userService;
         _priorityService = priorityService;      
     }
 
@@ -36,6 +38,7 @@ public class TaskItemsMSSQLService : ITaskItemsService
 
         foreach (TaskItem task in taskItem)
         {
+            task.User = _userService.Find(task.UserId);
             task.Priority = _priorityService.Find(task.PriorityId);
         }
 
@@ -56,7 +59,7 @@ public class TaskItemsMSSQLService : ITaskItemsService
             temp.TaskName = task.TaskName;
             temp.Status = task.Status;
             temp.Desc = task.Desc;
-            temp.TeamId = task.TeamId;
+            temp.UserId = task.UserId;
             temp.PriorityId = task.PriorityId;
             temp.Priority = _priorityService.Find(task.PriorityId);
         }
